@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг»
 
 * Студент: [Виталий Васильев](https://up.htmlacademy.ru/javascript/26/user/1898375).
-* Наставник: `Неизвестно`.
+* Наставник: [Андрей Устименко](https://htmlacademy.ru/profile/spiritmoon).
 
 ---
 
