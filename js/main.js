@@ -1,29 +1,21 @@
 //Получение случайного целого числа в заданном интервале, включительно.
-
-function getRandomIntInclusive(min, max) {
+function getRandomInt(min, max) {
   if (min >=0 && max > 0 && min !== max && max > min) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+    const minValue = Math.ceil(min);
+    const maxValue = Math.floor(max);
+    return Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue;
   }
-  return 'Некорректный интервал! Числа должны быть положительными. Проверьте последовательность ввода значений.';
+  return null;
 }
 
-//Случаные координаты с плавающей точкой из диапазона "от...до" включительно, с указанным "количеством знаков после запятой".
-
-function getRandomIntInclusiveСoordinate(min, max, afterDecimal) {
+//Получение случайного числа с плавающей точкой в заданном интервале включительно, с указанным "количеством знаков после запятой".
+function getRandomIntFloat(min, max, afterDecimal) {
   if (min >=0 && max > 0 && min !== max && max > min) {
-    const coordinate = Math.random() * (max - min + 1) + min;
-    if ( afterDecimal < 0 || afterDecimal >= 6) { // Сброс координат до точности в 111 км (целое число), если отрицательное значение или просят точность выше 1.1 м (6 и выше знаков).
-      afterDecimal = 0;
-      return coordinate.toFixed(afterDecimal);
-    }
-    return coordinate.toFixed(afterDecimal);
+    const intFloat = Math.random() * (max - min + 1) + min;
+    return intFloat.toFixed(afterDecimal);
   }
-  return 'Некорректный интервал! Интервал координат должен быть положительными. Проверьте последовательность ввода значений.';
+  return null;
 }
 
-getRandomIntInclusive(2,100);
-getRandomIntInclusiveСoordinate(4,44,2);
-
-
+getRandomInt(2,70);
+getRandomIntFloat(4,44,9);
