@@ -134,13 +134,15 @@ function getNumbersArray(length) {
     someArray[i] = String(i).padStart(2, 0);
   }
 
+  someArray.shift();
+
   return someArray;
 }
 
 const numbersArray = getNumbersArray(10);
 
 function getAuthor (array) {
-  const avatarNumber = getRandomIndex(array);
+  const avatarNumber = array.shift();
 
   return {
     avatar: `img/avatars/user${avatarNumber}.png`,
@@ -158,6 +160,9 @@ const createOneObject = function () {
 };
 
 //Cоздать массив из 10 обьектов
-const objectsArray = Array.from({length: 10},createOneObject);
+function objectsArray () {
+
+  return Array.from({length: 10},createOneObject);
+}
 
 objectsArray();
