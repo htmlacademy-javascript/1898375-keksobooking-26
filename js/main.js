@@ -24,40 +24,30 @@ function getRandomIntFloat(min, max, afterDecimal) {
 }
 
 //Получить случайный элемент массива
-function getRandomIndex (someArray) {
-  const randomIndex = getRandomInt (1, someArray.length - 1);
-
-  return someArray[randomIndex];
+function getRandomItem(array) {
+  return array[Math.floor(Math.random()*array.length)];
 }
 
-//Получить случайный массив из слов строки
-function getRandomStringsArray (string) {
-  const newArray = string.split(' ');
-  const arrayWithRepeats = [];
-
-  for (let i = 0; i <= newArray.length - 1; i++) {
-    arrayWithRepeats[i] = getRandomIndex(newArray);
-  }
-
-  const uniqueArray = [...new Set(arrayWithRepeats)];
-
-  return uniqueArray;
+//Получить массив случайной длины
+function getRandomArray(array) {
+  const index = [Math.floor(Math.random()*array.length)];
+  const newArray = array.slice(index, array.length);
+  return newArray;
 }
 
-// ВЫЧЕСЛЕНИЯ ДЛЯ Object
+// ВЫЧЕСЛЕНИЯ ДЛЯ Offer
 
 // Создать {location:}
-function getLocation () {
-  const latNumber = getRandomIntFloat(35.65000, 35.70000, 5);
-  const lngNumber = getRandomIntFloat(139.70000, 139.80000, 5);
 
+const LATITUDE_ARRAY = [35.65000, 35.70000, 5];
+const LONGITUDE_ARRAY = [139.70000, 139.80000, 5];
+
+function getLocation() {
   return {
-    lat: latNumber,
-    lng: lngNumber
+    lat: getRandomIntFloat(...LATITUDE_ARRAY),
+    lng: getRandomIntFloat(...LONGITUDE_ARRAY)
   };
 }
-
-const objectLocation = getLocation();
 
 // Создать {offer:}
 const TITLE_ARRAY = [
@@ -93,76 +83,60 @@ const DESCRIPTION_ARRAY = [
   'С дыркой в полу'
 ];
 
-const features = 'wifi dishwasher parking washer elevator conditioner';
-const photos =
-'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg ' +
-'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg '+
-'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg';
+const FEATURES = [
+  'wifi',
+  'dishwasher',
+  'parking',
+  'washer',
+  'elevator',
+  'conditioner'
+];
+const PHOTOS = [
+  'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
+  'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
+  'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'
+];
 
-function createOffer () {
-  const randomTitle = getRandomIndex(TITLE_ARRAY);
-  const randomPrice = getRandomInt(5000, 20000);
-  const randomType = getRandomIndex(TYPE_ARRAY);
-  const randomRoomsNumber = getRandomInt(1, 10);
-  const randomGuestsNumber = getRandomInt(1, 15);
-  const checkinTime = getRandomIndex(TIME_ARRAY);
-  const checkoutTime = getRandomIndex(TIME_ARRAY);
-  const randomFeatures = getRandomStringsArray(features);
-  const randomDescription = getRandomIndex(DESCRIPTION_ARRAY);
-  const randomPhotos = getRandomStringsArray(photos);
+const RANDOM_NUMBERS = [1, 10];
+const RANDOM_PRICE = [5000, 20000];
 
+function createOffer(value, index) {
+  const randomTitle = getRandomItem(TITLE_ARRAY);
+  const randomPrice = getRandomInt(...RANDOM_PRICE);
+  const randomType = getRandomItem(TYPE_ARRAY);
+  const randomRoomsNumber = getRandomInt(...RANDOM_NUMBERS);
+  const randomGuestsNumber = getRandomInt(...RANDOM_NUMBERS);
+  const checkinTime = getRandomItem(TIME_ARRAY);
+  const checkoutTime = getRandomItem(TIME_ARRAY);
+  const randomFeatures = getRandomArray(FEATURES);
+  const randomDescription = getRandomItem(DESCRIPTION_ARRAY);
+  const randomPhotos = getRandomArray(PHOTOS);
+  const randomLocation = getLocation();
+  const avatarNumber = String(index + 1).padStart(2, '0');
   return {
-    title: randomTitle,
-    address: `${objectLocation.lat}, ${objectLocation.lng}`,
-    price: randomPrice,
-    type: randomType,
-    rooms: randomRoomsNumber,
-    guests: randomGuestsNumber,
-    checkin: checkinTime,
-    checkout: checkoutTime,
-    features: randomFeatures,
-    description: randomDescription,
-    photos: randomPhotos
+    author: {avatar: `img/avatars/${avatarNumber}.png`,},
+    offer: {
+      title: randomTitle,
+      adress: `${randomLocation.lat}, ${randomLocation.lng}`,
+      price: randomPrice,
+      type: randomType,
+      rooms: randomRoomsNumber,
+      guests: randomGuestsNumber,
+      checkin: checkinTime,
+      checkout: checkoutTime,
+      features: randomFeatures,
+      description: randomDescription,
+      photos: randomPhotos
+    },
+    location: randomLocation
   };
 }
-
-// Создать {author:}
-function getNumbersArray(length) {
-  const someArray = [];
-
-  for (let i = 0; i <= length; i++) {
-    someArray[i] = String(i).padStart(2, 0);
-  }
-
-  someArray.shift();
-
-  return someArray;
-}
-
-const numbersArray = getNumbersArray(10);
-
-function getAuthor (array) {
-  const avatarNumber = array.shift();
-
-  return {
-    avatar: `img/avatars/user${avatarNumber}.png`,
-  };
-}
-
-// Соединяем вычеления в Object
-const createOneObject = function () {
-
-  return {
-    author: getAuthor(numbersArray),
-    offer: createOffer(),
-    location: getLocation(),
-  };
-};
 
 //Cоздать массив из 10 обьектов
-function objectsArray () {
+const ARRAY_LENGTH = 10;
 
-  return Array.from({length: 10},createOneObject);
+function objectsArray () {
+  return Array.from({length: ARRAY_LENGTH},createOffer);
 }
 
 objectsArray();
