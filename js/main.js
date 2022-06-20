@@ -1,55 +1,26 @@
-//  ОБЩИЕ ФУНКЦИИ
+// ДАННЫЕ ДЛЯ ВЫЧЕСЛЕНИЯ offer
 
-//Получение случайного целого числа в заданном интервале, включительно.
-function getRandomInt(min, max) {
-  if (min >=0 && max > 0 && min !== max && max > min) {
-    const minValue = Math.ceil(min);
-    const maxValue = Math.floor(max);
+const LATITUDE_MIN = 35.65000;
+const LATITUDE_MAX = 35.70000;
 
-    return Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue;
-  }
+const LONGITUDE_MIN = 139.70000;
+const LONGITUDE_MAX = 139.80000;
 
-  return null;
-}
+const NUMBER_AFTER_DECIMAL = 5;
 
-//Получение случайного числа с плавающей точкой в заданном интервале включительно, с указанным "количеством знаков после запятой".
-function getRandomIntFloat(min, max, afterDecimal) {
-  if (min >=0 && max > 0 && min !== max && max > min) {
-    const intFloat = Math.random() * (max - min + 1) + min;
+const MIN_ROOM_NUMBER = 1;
+const MAX_ROOM_NUMBER = 10;
 
-    return +intFloat.toFixed(afterDecimal);
-  }
+const MIN_PRICE = 5000;
+const MAX_PRICE = 20000;
 
-  return null;
-}
+const MIN_GUESTS_NUMBER = 3;
+const MAX_GUESTS_NUMBER = 12;
 
-//Получить случайный элемент массива
-function getRandomItem(array) {
-  return array[Math.floor(Math.random()*array.length)];
-}
+const ARRAY_LENGTH = 10;
 
-//Получить массив случайной длины
-function getRandomArray(array) {
-  const index = [Math.floor(Math.random()*array.length)];
-  const newArray = array.slice(index, array.length);
-  return newArray;
-}
+const ARRAY_MIN_INDEX = 0;
 
-// ВЫЧЕСЛЕНИЯ ДЛЯ Offer
-
-// Создать {location:}
-
-const LATITUDE_ARRAY = [35.65000, 35.70000, 5];
-const LONGITUDE_ARRAY = [139.70000, 139.80000, 5];
-
-function getLocation() {
-  return {
-    lat: getRandomIntFloat(...LATITUDE_ARRAY),
-    lng: getRandomIntFloat(...LONGITUDE_ARRAY)
-  };
-}
-
-// Создать {offer:}
 const TITLE_ARRAY = [
   'Сдесь и сейчас - халупа!',
   'Поместье графа Акулы.',
@@ -97,46 +68,80 @@ const PHOTOS = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'
 ];
 
-const RANDOM_NUMBERS = [1, 10];
-const RANDOM_PRICE = [5000, 20000];
+//  ОБЩИЕ ФУНКЦИИ
 
-function createOffer(value, index) {
-  const randomTitle = getRandomItem(TITLE_ARRAY);
-  const randomPrice = getRandomInt(...RANDOM_PRICE);
-  const randomType = getRandomItem(TYPE_ARRAY);
-  const randomRoomsNumber = getRandomInt(...RANDOM_NUMBERS);
-  const randomGuestsNumber = getRandomInt(...RANDOM_NUMBERS);
-  const checkinTime = getRandomItem(TIME_ARRAY);
-  const checkoutTime = getRandomItem(TIME_ARRAY);
-  const randomFeatures = getRandomArray(FEATURES);
-  const randomDescription = getRandomItem(DESCRIPTION_ARRAY);
-  const randomPhotos = getRandomArray(PHOTOS);
-  const randomLocation = getLocation();
-  const avatarNumber = String(index + 1).padStart(2, '0');
+//Получение случайного целого числа в заданном интервале, включительно.
+function getRandomInt(min, max) {
+  if (min >=0 && max > 0 && min !== max && max > min) {
+    const minValue = Math.ceil(min);
+    const maxValue = Math.floor(max);
+
+    return Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue;
+  }
+
+  return null;
+}
+
+//Получение случайного числа с плавающей точкой в заданном интервале включительно, с указанным "количеством знаков после запятой".
+function getRandomIntFloat(min, max, afterDecimal) {
+  if (min >=0 && max > 0 && min !== max && max > min) {
+    const intFloat = Math.random() * (max - min + 1) + min;
+
+    return +intFloat.toFixed(afterDecimal);
+  }
+
+  return null;
+}
+
+//Получить случайный элемент массива
+function getRandomArrayItem(array) {
+  return array[getRandomInt(ARRAY_MIN_INDEX, array.length - 1)];
+}
+
+//Получить массив случайной длины
+function getRandomArray(array) {
+  const newArray = array.slice(getRandomInt(ARRAY_MIN_INDEX, array.length - 1));
+
+  return newArray;
+}
+
+//ВЫЧЕСЛЕНИЯ НА ОСНОВЕ ОБЩИХ ФУНКЦИЙ И ДАННЫХ.
+
+function getLocation() {
   return {
-    author: {avatar: `img/avatars/${avatarNumber}.png`,},
-    offer: {
-      title: randomTitle,
-      adress: `${randomLocation.lat}, ${randomLocation.lng}`,
-      price: randomPrice,
-      type: randomType,
-      rooms: randomRoomsNumber,
-      guests: randomGuestsNumber,
-      checkin: checkinTime,
-      checkout: checkoutTime,
-      features: randomFeatures,
-      description: randomDescription,
-      photos: randomPhotos
+    lat: getRandomIntFloat(LATITUDE_MIN, LATITUDE_MAX, NUMBER_AFTER_DECIMAL),
+    lng: getRandomIntFloat(LONGITUDE_MIN,LONGITUDE_MAX, NUMBER_AFTER_DECIMAL)
+  };
+}
+
+function createOffer(_,index) {
+  const coordinates = getLocation();
+  const avatarNumber = String(index + 1).padStart(2, '0');
+
+  return {
+    author: {
+      avatar: `img/avatars/user${avatarNumber}.png`,
     },
-    location: randomLocation
+    offer: {
+      title: getRandomArrayItem(TITLE_ARRAY),
+      adress: `${coordinates.lat}, ${coordinates.lng}`,
+      price: getRandomInt(MIN_PRICE, MAX_PRICE),
+      type: getRandomArrayItem(TYPE_ARRAY),
+      rooms: getRandomInt(MIN_ROOM_NUMBER, MAX_ROOM_NUMBER),
+      guests: getRandomInt(MIN_GUESTS_NUMBER, MAX_GUESTS_NUMBER),
+      checkin: getRandomArrayItem(TIME_ARRAY),
+      checkout: getRandomArrayItem(TIME_ARRAY),
+      features: getRandomArray(FEATURES),
+      description: getRandomArrayItem(DESCRIPTION_ARRAY),
+      photos: getRandomArray(PHOTOS)
+    },
+    location: coordinates,
   };
 }
 
 //Cоздать массив из 10 обьектов
-const ARRAY_LENGTH = 10;
-
-function objectsArray () {
-  return Array.from({length: ARRAY_LENGTH},createOffer);
+function createObjectsArray (arrayLength) {
+  return Array.from({length: arrayLength},createOffer);
 }
 
-objectsArray();
+createObjectsArray(ARRAY_LENGTH);
