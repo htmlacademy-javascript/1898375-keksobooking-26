@@ -17,11 +17,9 @@ const MAX_PRICE = 20000;
 const MIN_GUESTS_NUMBER = 3;
 const MAX_GUESTS_NUMBER = 12;
 
-const ARRAY_LENGTH = 10;
+const MAX_ADS = 10;
 
-const ARRAY_MIN_INDEX = 0;
-
-const TITLE_ARRAY = [
+const TITLES = [
   'Сдесь и сейчас - халупа!',
   'Поместье графа Акулы.',
   'Домик у моря.',
@@ -34,7 +32,7 @@ const TITLE_ARRAY = [
   'Домик у свалки.'
 ];
 
-const TYPE_ARRAY = [
+const TYPES = [
   'palace',
   'flat',
   'house',
@@ -42,13 +40,13 @@ const TYPE_ARRAY = [
   'hotel',
 ];
 
-const TIME_ARRAY = [
+const TIMES = [
   '12:00',
   '13:00',
   '14:00'
 ];
 
-const DESCRIPTION_ARRAY = [
+const DESCRIPTIONS = [
   'Пыльно и темно',
   'Cветло и чисто',
   'С дыркой в полу'
@@ -95,12 +93,12 @@ function getRandomIntFloat(min, max, afterDecimal) {
 
 //Получить случайный элемент массива
 function getRandomArrayItem(array) {
-  return array[getRandomInt(ARRAY_MIN_INDEX, array.length - 1)];
+  return array[getRandomInt(0, array.length - 1)];
 }
 
 //Получить массив случайной длины
 function getRandomArray(array) {
-  const newArray = array.slice(getRandomInt(ARRAY_MIN_INDEX, array.length - 1));
+  const newArray = array.slice(getRandomInt(0, array.length - 1));
 
   return newArray;
 }
@@ -108,40 +106,40 @@ function getRandomArray(array) {
 //ВЫЧЕСЛЕНИЯ НА ОСНОВЕ ОБЩИХ ФУНКЦИЙ И ДАННЫХ.
 
 function getLocation() {
-  return {
+  return{
     lat: getRandomIntFloat(LATITUDE_MIN, LATITUDE_MAX, NUMBER_AFTER_DECIMAL),
     lng: getRandomIntFloat(LONGITUDE_MIN,LONGITUDE_MAX, NUMBER_AFTER_DECIMAL)
   };
 }
 
-function createOffer(_,index) {
-  const coordinates = getLocation();
-  const avatarNumber = String(index + 1).padStart(2, '0');
+function createOffer(index) {
+  const location = getLocation();
+  const avatarNumber = String(index).padStart(2, '0');
 
   return {
     author: {
       avatar: `img/avatars/user${avatarNumber}.png`,
     },
     offer: {
-      title: getRandomArrayItem(TITLE_ARRAY),
-      adress: `${coordinates.lat}, ${coordinates.lng}`,
+      title: getRandomArrayItem(TITLES),
+      adress: `${location.lat}, ${location.lng}`,
       price: getRandomInt(MIN_PRICE, MAX_PRICE),
-      type: getRandomArrayItem(TYPE_ARRAY),
+      type: getRandomArrayItem(TYPES),
       rooms: getRandomInt(MIN_ROOM_NUMBER, MAX_ROOM_NUMBER),
       guests: getRandomInt(MIN_GUESTS_NUMBER, MAX_GUESTS_NUMBER),
-      checkin: getRandomArrayItem(TIME_ARRAY),
-      checkout: getRandomArrayItem(TIME_ARRAY),
+      checkin: getRandomArrayItem(TIMES),
+      checkout: getRandomArrayItem(TIMES),
       features: getRandomArray(FEATURES),
-      description: getRandomArrayItem(DESCRIPTION_ARRAY),
+      description: getRandomArrayItem(DESCRIPTIONS),
       photos: getRandomArray(PHOTOS)
     },
-    location: coordinates,
+    location
   };
 }
 
 //Cоздать массив из 10 обьектов
-function createObjectsArray (arrayLength) {
-  return Array.from({length: arrayLength},createOffer);
+function createObjectsArray (maxElements) {
+  return Array.from({length: maxElements},(_, index) => createOffer(index + 1));
 }
 
-createObjectsArray(ARRAY_LENGTH);
+console.log(createObjectsArray(MAX_ADS));
