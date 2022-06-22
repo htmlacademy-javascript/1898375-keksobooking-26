@@ -33,7 +33,4 @@ function getRandomArray(array) {
   return newArray;
 }
 
-export {getRandomInt};
-export {getRandomIntFloat};
-export {getRandomArrayItem};
-export {getRandomArray};
+export {getRandomInt, getRandomIntFloat, getRandomArrayItem, getRandomArray};

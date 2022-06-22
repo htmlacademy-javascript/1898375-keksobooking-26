@@ -1,7 +1,4 @@
-import {getRandomInt} from './util.js';
-import {getRandomIntFloat} from './util.js';
-import {getRandomArrayItem} from './util.js';
-import {getRandomArray} from './util.js';
+import {getRandomInt, getRandomIntFloat, getRandomArrayItem, getRandomArray} from './util.js';
 
 // ДАННЫЕ ДЛЯ ВЫЧЕСЛЕНИЯ offer
 
