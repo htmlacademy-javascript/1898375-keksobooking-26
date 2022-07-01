@@ -1,1 +1,1 @@
-import './fill-offer-template.js';
+import './offer-popup.js';
