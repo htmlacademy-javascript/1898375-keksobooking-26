@@ -19,6 +19,9 @@ const MAX_PRICE = 20000;
 const MIN_GUESTS_NUMBER = 3;
 const MAX_GUESTS_NUMBER = 12;
 
+// количество создаваемых обьявлений
+const MAX_ADS = 10;
+
 const TITLES = [
   'Сдесь и сейчас - халупа!',
   'Поместье графа Акулы.',
@@ -105,4 +108,4 @@ function createOffersArray (maxElements) {
   return Array.from({length: maxElements},(_, index) => createOffer(index + 1));
 }
 
-export {createOffersArray};
+export {createOffersArray, MAX_ADS};
