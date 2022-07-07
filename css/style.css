@@ -353,6 +353,11 @@ fieldset {
   font-size: 14px;
 }
 
+.ad-form__element-text-error {
+  font-weight: bold;
+  color: #ff5635;
+}
+
 .ad-form__element--wide {
   -ms-flex-preferred-size: 50%;
       flex-basis: 50%;
@@ -362,11 +367,6 @@ fieldset {
 .ad-form__label {
   display: block;
   padding-bottom: 5px;
-}
-
-.ad-form__label-text-error {
-  font-weight: bold;
-  color: #ff5635;
 }
 
 .ad-form__element input,
