@@ -1,4 +1,4 @@
 import './offer-popup.js';
 import './offer-form-validation.js';
-import './map-control.js';
-import './main-form-slider.js';
+import './map-settings.js';
+import './price-slider.js';

@@ -1,24 +1,16 @@
+import {createOfferPopup, offersData} from './offer-popup.js';
+import {enableForms, getAddress} from './form.js';
+
+const MAP_LAT = 35.70139;
+const MAP_LNG = 139.70972;
+
 const map = L.map('map-canvas')
   .on('load', () => {
-    const filterForm = document.querySelector('.map__filters');
-    const mainForm = document.querySelector('.ad-form');
-
-    filterForm.classList.remove('map__filters--disabled');
-    mainForm.classList.remove('ad-form--disabled');
-
-    function setElementActive(item) {
-      item.removeAttribute('disabled');
-    }
-
-    const filterFormElements = filterForm.querySelectorAll('fieldset');
-    filterFormElements.forEach(setElementActive);
-
-    const mainFormElements = mainForm.querySelectorAll('fieldset');
-    mainFormElements.forEach(setElementActive);
+    enableForms();
   })
   .setView({
-    lat: 35.70139,
-    lng: 139.70972,
+    lat: MAP_LAT,
+    lng: MAP_LNG,
   }, 10);
 
 L.tileLayer(
@@ -42,8 +34,8 @@ const secondPinIcon = L.icon({
 
 const mainMarker = L.marker(
   {
-    lat: 35.70139,
-    lng: 139.70972,
+    lat: MAP_LAT,
+    lng: MAP_LNG,
   },
   {
     draggable: true,
@@ -51,4 +43,52 @@ const mainMarker = L.marker(
   },
 );
 
-export {map, mainMarker, secondPinIcon};
+mainMarker.addTo(map);
+
+function reloadMap() {
+  mainMarker.setLatLng({
+    lat: MAP_LAT,
+    lng: MAP_LNG,
+  });
+
+  map.setView({
+    lat: MAP_LAT,
+    lng: MAP_LNG,
+  }, 10);
+
+}
+
+//Сброс карты в начальное положение
+const resetButton = document.querySelector('.ad-form__reset');
+resetButton.addEventListener('click', reloadMap);
+
+//Получение координат с главной метки
+mainMarker.on('moveend', (evt) => {
+  const coordinate = evt.target.getLatLng();
+  getAddress(coordinate);
+});
+
+//Добавить слой меток на карту с всплывающими окнами
+const markerGroup = L.layerGroup().addTo(map);
+
+function createMarker(element) {
+  const lat = element.location.lat;
+  const lng = element.location.lng;
+  const marker = L.marker(
+    {
+      lat,
+      lng,
+    },
+    {
+      secondPinIcon,
+    },
+  );
+
+  marker
+    .addTo(markerGroup)
+    .bindPopup(createOfferPopup(element));
+}
+
+offersData.forEach((element) => {
+  createMarker(element);
+});

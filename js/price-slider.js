@@ -2,7 +2,6 @@ const priceSlaider = document.querySelector('.ad-form__slider');
 const priceInput = document.querySelector('#price');
 const placeSelect = document.querySelector('#type');
 
-
 noUiSlider.create(priceSlaider,{
   range: {
     min: 0,
@@ -13,9 +12,6 @@ noUiSlider.create(priceSlaider,{
   connect: 'lower',
   format: {
     to: function (value) {
-      if (Number.isInteger(value)) {
-        return value.toFixed(0);
-      }
       return value.toFixed(0);
     },
     from: function (value) {
