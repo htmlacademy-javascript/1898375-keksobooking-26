@@ -11,7 +11,7 @@ const OFFER_NAME_BY_TYPE = {
 const template = document.querySelector('#card').content;
 const cardTemplate = template.querySelector('.popup');
 
-const offers = createOffersArray(MAX_ADS);
+const offersData = createOffersArray(MAX_ADS);
 
 const createOfferPopup = function(offerData) {
   const offerPopup = cardTemplate.cloneNode(true);
@@ -60,8 +60,8 @@ const createOfferPopup = function(offerData) {
   } else {
     popupPhotos.classList.add ('hidden');
   }
+
   return offerPopup;
 };
 
-const mapCanvas = document.querySelector('#map-canvas');
-mapCanvas.append(createOfferPopup(offers[0]));
+export {createOfferPopup, offersData};

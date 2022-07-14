@@ -32,12 +32,8 @@ function validateCapacity() {
   return ROOMS_OPTION[roomsNumber.value].includes(roomsCapacity.value);
 }
 
-function getErrorMessage() {
-  return 'Значение поля не соотвествует соседнему';
-}
-
-pristine.addValidator(roomsNumber, validateCapacity, getErrorMessage);
-pristine.addValidator(roomsCapacity, validateCapacity, getErrorMessage);
+pristine.addValidator(roomsNumber, validateCapacity, () => {'Значение поля не соотвествует соседнему';});
+pristine.addValidator(roomsCapacity, validateCapacity, () => {'Значение поля не соотвествует соседнему';});
 
 roomsNumber.addEventListener('change', () => {
   pristine.validate(roomsCapacity);
@@ -55,7 +51,7 @@ placementSelect.addEventListener('change', () => {
   const selectedOption = placementSelect.value;
   priceByNight.value = '';
   priceByNight.setAttribute('min', OFFER_PRICE_BY_TYPE[selectedOption]);
-  priceByNight.placeholder = `Минимум ${OFFER_PRICE_BY_TYPE[selectedOption]}`;
+  priceByNight.placeholder = OFFER_PRICE_BY_TYPE[selectedOption];
 });
 
 // Проверка формы при отправке
