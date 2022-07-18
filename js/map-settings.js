@@ -1,5 +1,5 @@
 import {createOfferPopup, offersData} from './offer-popup.js';
-import {enableForms, getAddress} from './form.js';
+import {enableForms, writeDownAddress} from './form.js';
 
 const MAP_LAT = 35.70139;
 const MAP_LNG = 139.70972;
@@ -45,7 +45,7 @@ const mainMarker = L.marker(
 
 mainMarker.addTo(map);
 
-function reloadMap() {
+function resetMapView() {
   mainMarker.setLatLng({
     lat: MAP_LAT,
     lng: MAP_LNG,
@@ -60,12 +60,12 @@ function reloadMap() {
 
 //Сброс карты в начальное положение
 const resetButton = document.querySelector('.ad-form__reset');
-resetButton.addEventListener('click', reloadMap);
+resetButton.addEventListener('click', resetMapView);
 
 //Получение координат с главной метки
 mainMarker.on('moveend', (evt) => {
   const coordinate = evt.target.getLatLng();
-  getAddress(coordinate);
+  writeDownAddress(coordinate);
 });
 
 //Добавить слой меток на карту с всплывающими окнами

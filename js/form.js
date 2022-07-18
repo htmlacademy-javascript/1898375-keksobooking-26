@@ -29,8 +29,8 @@ function disabledForms () {
 
 //Записать координаты в поле адреса
 const addressInput = document.querySelector('#address');
-function getAddress(address){
+function writeDownAddress(address){
   addressInput.value  = `lat: ${address.lat.toFixed(5)} lng: ${address.lng.toFixed(5)}`;
 }
 
-export {enableForms, disabledForms, getAddress};
+export {enableForms, disabledForms, writeDownAddress};

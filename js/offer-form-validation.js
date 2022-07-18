@@ -32,8 +32,8 @@ function validateCapacity() {
   return ROOMS_OPTION[roomsNumber.value].includes(roomsCapacity.value);
 }
 
-pristine.addValidator(roomsNumber, validateCapacity, () => {'Значение поля не соотвествует соседнему';});
-pristine.addValidator(roomsCapacity, validateCapacity, () => {'Значение поля не соотвествует соседнему';});
+pristine.addValidator(roomsNumber, validateCapacity, 'Значение поля не соотвествует соседнему');
+pristine.addValidator(roomsCapacity, validateCapacity, 'Значение поля не соотвествует соседнему');
 
 roomsNumber.addEventListener('change', () => {
   pristine.validate(roomsCapacity);
