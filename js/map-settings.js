@@ -1,5 +1,6 @@
-import {createOfferPopup, offersData} from './offer-popup.js';
+import {createOfferPopup} from './offer-popup.js';
 import {enableForms, writeDownAddress} from './form.js';
+import {getData} from './server-request.js';
 
 const MAP_LAT = 35.70139;
 const MAP_LNG = 139.70972;
@@ -89,6 +90,12 @@ function createMarker(element) {
     .bindPopup(createOfferPopup(element));
 }
 
-offersData.forEach((element) => {
-  createMarker(element);
+//Отрисовка маркеров на карте с помощью данных с сервера
+
+getData((offers) => {
+  offers.forEach((element) => {
+    createMarker(element);
+  });
 });
+
+export {resetMapView};

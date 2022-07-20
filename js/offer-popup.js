@@ -1,5 +1,3 @@
-import {createOffersArray, MAX_ADS} from './create-offers.js';
-
 const OFFER_NAME_BY_TYPE = {
   flat: 'Квартира',
   bungalow: 'Бунгало',
@@ -10,8 +8,6 @@ const OFFER_NAME_BY_TYPE = {
 
 const template = document.querySelector('#card').content;
 const cardTemplate = template.querySelector('.popup');
-
-const offersData = createOffersArray(MAX_ADS);
 
 const createOfferPopup = function(offerData) {
   const offerPopup = cardTemplate.cloneNode(true);
@@ -64,4 +60,4 @@ const createOfferPopup = function(offerData) {
   return offerPopup;
 };
 
-export {createOfferPopup, offersData};
+export {createOfferPopup};

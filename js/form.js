@@ -1,3 +1,7 @@
+import {pristine} from './main-form-validation.js';
+import {resetMapView} from './map-settings.js';
+import {sendData, createSuccessPopup, createErrorPopup} from './server-request.js';
+
 const filterForm = document.querySelector('.map__filters');
 const mainForm = document.querySelector('.ad-form');
 const filterFormElements = filterForm.querySelectorAll('fieldset');
@@ -33,4 +37,49 @@ function writeDownAddress(address){
   addressInput.value  = `lat: ${address.lat.toFixed(5)} lng: ${address.lng.toFixed(5)}`;
 }
 
-export {enableForms, disabledForms, writeDownAddress};
+// Обнуление формы после отправки
+function resetMainForm() {
+  mainForm.reset();
+  resetMapView();
+}
+
+//Отключение и включение кнопки гланой формы
+const submitButton = mainForm.querySelector('.ad-form__submit');
+
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = 'Отправляю...';
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = 'Опубликовать';
+};
+
+
+// Сбор данных с основной формы
+function setMainFormSubmit() {
+  mainForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    const isValid = pristine.validate();
+
+    if (isValid) {
+      blockSubmitButton();
+      sendData(
+        () => {
+          createSuccessPopup();
+          resetMainForm();
+          unblockSubmitButton();
+        },
+        () => {
+          createErrorPopup();
+          unblockSubmitButton();
+        },
+        new FormData(evt.target),
+      );
+    }
+  });
+}
+
+
+export {enableForms, disabledForms, writeDownAddress, setMainFormSubmit};

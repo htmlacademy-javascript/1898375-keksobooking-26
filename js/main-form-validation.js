@@ -15,8 +15,8 @@ const OFFER_PRICE_BY_TYPE = {
 };
 
 //Базовая валидация на всю форму
-const offerForm = document.querySelector('.ad-form');
-const pristine = new Pristine(offerForm, {
+const mainForm = document.querySelector('.ad-form');
+const pristine = new Pristine(mainForm, {
   classTo: 'ad-form__element',
   errorClass: 'ad-form__element--invalid',
   successClass: 'ad-form__element--valid',
@@ -25,8 +25,8 @@ const pristine = new Pristine(offerForm, {
 });
 
 //Отдельная валидация полей выборы комнаты и гостей
-const roomsNumber = offerForm.querySelector('#room_number');
-const roomsCapacity = offerForm.querySelector('#capacity');
+const roomsNumber = mainForm.querySelector('#room_number');
+const roomsCapacity = mainForm.querySelector('#capacity');
 
 function validateCapacity() {
   return ROOMS_OPTION[roomsNumber.value].includes(roomsCapacity.value);
@@ -44,8 +44,8 @@ roomsCapacity.addEventListener('change', () => {
 });
 
 //Привязка Тип жилья к Цена за ночь, руб.
-const placementSelect = offerForm.querySelector('#type');
-const priceByNight = offerForm.querySelector('#price');
+const placementSelect = mainForm.querySelector('#type');
+const priceByNight = mainForm.querySelector('#price');
 
 placementSelect.addEventListener('change', () => {
   const selectedOption = placementSelect.value;
@@ -54,13 +54,4 @@ placementSelect.addEventListener('change', () => {
   priceByNight.placeholder = OFFER_PRICE_BY_TYPE[selectedOption];
 });
 
-// Проверка формы при отправке
-offerForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  const isValid = pristine.validate();
-
-  if (isValid) {
-    offerForm.submit();
-  }
-
-});
+export {pristine};
