@@ -1,17 +1,20 @@
 import {createOfferPopup} from './offer-popup.js';
-import {enableForms, writeDownAddress} from './form.js';
-import {getData} from './server-request.js';
+import {enableMainForm, enableFiltersForm, setAddress} from './form.js';
+import {getAdsData} from './http.js';
 
-const MAP_LAT = 35.70139;
-const MAP_LNG = 139.70972;
+const DEFAULT_ADRESS = {
+  lat: 35.70139,
+  lng: 139.70972,
+};
 
 const map = L.map('map-canvas')
   .on('load', () => {
-    enableForms();
+    enableMainForm();
+    setAddress(DEFAULT_ADRESS);
   })
   .setView({
-    lat: MAP_LAT,
-    lng: MAP_LNG,
+    lat: DEFAULT_ADRESS.lat,
+    lng: DEFAULT_ADRESS.lng,
   }, 10);
 
 L.tileLayer(
@@ -35,8 +38,8 @@ const secondPinIcon = L.icon({
 
 const mainMarker = L.marker(
   {
-    lat: MAP_LAT,
-    lng: MAP_LNG,
+    lat: DEFAULT_ADRESS.lat,
+    lng: DEFAULT_ADRESS.lng,
   },
   {
     draggable: true,
@@ -48,25 +51,21 @@ mainMarker.addTo(map);
 
 function resetMapView() {
   mainMarker.setLatLng({
-    lat: MAP_LAT,
-    lng: MAP_LNG,
+    lat: DEFAULT_ADRESS.lat,
+    lng: DEFAULT_ADRESS.lng,
   });
 
   map.setView({
-    lat: MAP_LAT,
-    lng: MAP_LNG,
+    lat: DEFAULT_ADRESS.lat,
+    lng: DEFAULT_ADRESS.lng,
   }, 10);
-
+  setAddress(DEFAULT_ADRESS);
 }
-
-//Сброс карты в начальное положение
-const resetButton = document.querySelector('.ad-form__reset');
-resetButton.addEventListener('click', resetMapView);
 
 //Получение координат с главной метки
 mainMarker.on('moveend', (evt) => {
   const coordinate = evt.target.getLatLng();
-  writeDownAddress(coordinate);
+  setAddress(coordinate);
 });
 
 //Добавить слой меток на карту с всплывающими окнами
@@ -90,12 +89,17 @@ function createMarker(element) {
     .bindPopup(createOfferPopup(element));
 }
 
-//Отрисовка маркеров на карте с помощью данных с сервера
-
-getData((offers) => {
-  offers.forEach((element) => {
-    createMarker(element);
+//Создать слой маркеров
+function renderMarkersLayer(offers) {
+  offers.forEach((offer) => {
+    createMarker(offer);
   });
+}
+
+//Получить данные с сервера и отрисовать их на карте
+getAdsData((offers) => {
+  enableFiltersForm();
+  renderMarkersLayer(offers);
 });
 
 export {resetMapView};

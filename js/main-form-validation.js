@@ -14,6 +14,8 @@ const OFFER_PRICE_BY_TYPE = {
   hotel: 3000
 };
 
+const ERROR_VALIDATION_MESSAGE = 'Значение поля не соотвествует соседнему';
+
 //Базовая валидация на всю форму
 const mainForm = document.querySelector('.ad-form');
 const pristine = new Pristine(mainForm, {
@@ -32,8 +34,8 @@ function validateCapacity() {
   return ROOMS_OPTION[roomsNumber.value].includes(roomsCapacity.value);
 }
 
-pristine.addValidator(roomsNumber, validateCapacity, 'Значение поля не соотвествует соседнему');
-pristine.addValidator(roomsCapacity, validateCapacity, 'Значение поля не соотвествует соседнему');
+pristine.addValidator(roomsNumber, validateCapacity, ERROR_VALIDATION_MESSAGE);
+pristine.addValidator(roomsCapacity, validateCapacity, ERROR_VALIDATION_MESSAGE);
 
 roomsNumber.addEventListener('change', () => {
   pristine.validate(roomsCapacity);

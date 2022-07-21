@@ -1,6 +1,7 @@
 import {pristine} from './main-form-validation.js';
 import {resetMapView} from './map-settings.js';
-import {sendData, createSuccessPopup, createErrorPopup} from './server-request.js';
+import {saveAdsData} from './http.js';
+import {renderSuccessMessage, renderErrorMessage} from './dialog.js';
 
 const filterForm = document.querySelector('.map__filters');
 const mainForm = document.querySelector('.ad-form');
@@ -16,32 +17,45 @@ function setElementDisabled(item) {
 }
 
 //Сделать формы на странице активными
-function enableForms () {
-  filterForm.classList.remove('map__filters--disabled');
+function enableMainForm () {
   mainForm.classList.remove('ad-form--disabled');
-  filterFormElements.forEach(setElementActive);
   mainFormElements.forEach(setElementActive);
 }
 
+function enableFiltersForm () {
+  filterForm.classList.remove('map__filters--disabled');
+  filterFormElements.forEach(setElementActive);
+}
+
 //Сделать формы на странице неактивными
-function disabledForms () {
-  filterForm.classList.add('map__filters--disabled');
+function disabledMainForm () {
   mainForm.classList.add('ad-form--disabled');
-  filterFormElements.forEach(setElementDisabled);
   mainFormElements.forEach(setElementDisabled);
+}
+
+function disabledFiltersForm () {
+  filterForm.classList.add('map__filters--disabled');
+  filterFormElements.forEach(setElementDisabled);
 }
 
 //Записать координаты в поле адреса
 const addressInput = document.querySelector('#address');
-function writeDownAddress(address){
+function setAddress(address){
   addressInput.value  = `lat: ${address.lat.toFixed(5)} lng: ${address.lng.toFixed(5)}`;
 }
 
 // Обнуление формы после отправки
-function resetMainForm() {
+function resetMapAndForm() {
   mainForm.reset();
   resetMapView();
 }
+
+//Обнуление формы и карты по кнопке
+const resetButton = document.querySelector('.ad-form__reset');
+resetButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  resetMapAndForm();
+});
 
 //Отключение и включение кнопки гланой формы
 const submitButton = mainForm.querySelector('.ad-form__submit');
@@ -58,28 +72,26 @@ const unblockSubmitButton = () => {
 
 
 // Сбор данных с основной формы
-function setMainFormSubmit() {
-  mainForm.addEventListener('submit', (evt) => {
-    evt.preventDefault();
-    const isValid = pristine.validate();
+mainForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  const isValid = pristine.validate();
 
-    if (isValid) {
-      blockSubmitButton();
-      sendData(
-        () => {
-          createSuccessPopup();
-          resetMainForm();
-          unblockSubmitButton();
-        },
-        () => {
-          createErrorPopup();
-          unblockSubmitButton();
-        },
-        new FormData(evt.target),
-      );
-    }
-  });
-}
+  if (isValid) {
+    blockSubmitButton();
+    saveAdsData(
+      () => {
+        renderSuccessMessage();
+        resetMapAndForm();
+        unblockSubmitButton();
+      },
+      () => {
+        renderErrorMessage();
+        unblockSubmitButton();
+      },
+      new FormData(evt.target),
+    );
+  }
+});
 
 
-export {enableForms, disabledForms, writeDownAddress, setMainFormSubmit};
+export {enableMainForm, enableFiltersForm, disabledMainForm, disabledFiltersForm, setAddress};
