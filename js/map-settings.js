@@ -1,5 +1,5 @@
 import {createOfferPopup} from './offer-popup.js';
-import {enableMainForm, enableFiltersForm, setAddress} from './form.js';
+import {enableMainForm, enableFiltersForm, setAddress, Select} from './form.js';
 import {getAdsData} from './http.js';
 
 const DEFAULT_ADRESS = {
@@ -60,6 +60,7 @@ function resetMapView() {
     lng: DEFAULT_ADRESS.lng,
   }, 10);
   setAddress(DEFAULT_ADRESS);
+  L.removeFrom(map);
 }
 
 //Получение координат с главной метки
@@ -69,7 +70,7 @@ mainMarker.on('moveend', (evt) => {
 });
 
 //Добавить слой меток на карту с всплывающими окнами
-const markerGroup = L.layerGroup().addTo(map);
+const BlueMarkerGroup = L.layerGroup().addTo(map);
 
 function createMarker(element) {
   const lat = element.location.lat;
@@ -85,7 +86,7 @@ function createMarker(element) {
   );
 
   marker
-    .addTo(markerGroup)
+    .addTo(BlueMarkerGroup)
     .bindPopup(createOfferPopup(element));
 }
 
@@ -96,10 +97,15 @@ function renderMarkersLayer(offers) {
   });
 }
 
+function clearBlueMarkers() {
+  BlueMarkerGroup.clearLayers();
+}
+
 //Получить данные с сервера и отрисовать их на карте
 getAdsData((offers) => {
   enableFiltersForm();
   renderMarkersLayer(offers);
+  Select(offers, renderMarkersLayer);
 });
 
-export {resetMapView};
+export {resetMapView,renderMarkersLayer, clearBlueMarkers};

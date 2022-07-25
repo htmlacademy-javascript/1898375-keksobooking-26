@@ -1,12 +1,20 @@
 import {pristine} from './main-form-validation.js';
-import {resetMapView} from './map-settings.js';
+import {resetMapView, renderMarkersLayer, clearBlueMarkers} from './map-settings.js';
 import {saveAdsData} from './http.js';
 import {renderSuccessMessage, renderErrorMessage} from './dialog.js';
 
+//элементы форм
 const filterForm = document.querySelector('.map__filters');
 const mainForm = document.querySelector('.ad-form');
-const filterFormElements = filterForm.querySelectorAll('fieldset');
+const filterFormSelects = filterForm.querySelectorAll('.map__filter');
+const filterFormCheckboxes = filterForm.querySelectorAll('fieldset');
 const mainFormElements = mainForm.querySelectorAll('fieldset');
+
+// форма фильтрации карты
+// const housingType = document.querySelector('#housing-type');
+// const housingPrice = document.querySelector('#housing-price');
+// const housingRooms = document.querySelector('#housing-rooms');
+// const housingGuests = document.querySelector('#housing-guests');
 
 function setElementActive(item) {
   item.removeAttribute('disabled');
@@ -24,7 +32,9 @@ function enableMainForm () {
 
 function enableFiltersForm () {
   filterForm.classList.remove('map__filters--disabled');
-  filterFormElements.forEach(setElementActive);
+  filterFormSelects.forEach(setElementActive);
+  filterFormCheckboxes.forEach(setElementActive);
+
 }
 
 //Сделать формы на странице неактивными
@@ -35,7 +45,8 @@ function disabledMainForm () {
 
 function disabledFiltersForm () {
   filterForm.classList.add('map__filters--disabled');
-  filterFormElements.forEach(setElementDisabled);
+  filterFormSelects.forEach(setElementDisabled);
+  filterFormCheckboxes.forEach(setElementDisabled);
 }
 
 //Записать координаты в поле адреса
@@ -70,6 +81,17 @@ const unblockSubmitButton = () => {
   submitButton.textContent = 'Опубликовать';
 };
 
+//фильтры карты
+
+function Select(array, cb) {
+  filterForm.addEventListener('change', (evt) => {
+    clearBlueMarkers();
+    if(evt.target.value === 'any') {
+      renderMarkersLayer(array);
+    }
+    cb(array.filter((element) => element.offer.type === evt.target.value));
+  });
+}
 
 // Сбор данных с основной формы
 mainForm.addEventListener('submit', (evt) => {
@@ -94,4 +116,4 @@ mainForm.addEventListener('submit', (evt) => {
 });
 
 
-export {enableMainForm, enableFiltersForm, disabledMainForm, disabledFiltersForm, setAddress};
+export {enableMainForm, enableFiltersForm, disabledMainForm, disabledFiltersForm, setAddress, Select};
