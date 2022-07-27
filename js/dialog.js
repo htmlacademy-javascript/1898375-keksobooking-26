@@ -1,44 +1,44 @@
 import {isEscKeydown, isMouseButton} from './util.js';
 
 //Удаление сообщения
-function removeMessage(evt) {
-  const MessageToUser = document.querySelector('#message-to-user');
-  if (isEscKeydown(evt) || isMouseButton(evt)) {
-    MessageToUser.remove();
-    document.removeEventListener('click', removeMessage);
-    document.removeEventListener('keydown', removeMessage);
+const messageRemoveHadler = (evt) => {
+  const messageToUser = document.querySelector('#message-to-user');
+  if (isEscKeydown(evt) || isMouseButton && messageToUser) {
+    messageToUser.remove();
+    document.removeEventListener('click', messageRemoveHadler);
+    document.removeEventListener('keydown', messageRemoveHadler);
   }
-}
+};
 
 //Создать сообщение из шаблона
-function renderMessageTemplate(elements) {
+const renderMessageTemplate = (elements) => {
   const newPopup = elements.cloneNode(true);
   document.body.append(newPopup);
-  document.addEventListener('click', removeMessage);
-  document.addEventListener('keydown', removeMessage);
-}
+  document.addEventListener('click', messageRemoveHadler);
+  document.addEventListener('keydown', messageRemoveHadler);
+};
 
 //Создать сообщение о успешной отправке формы
 const successTemplate = document.querySelector('#success').content;
 const successContent = successTemplate.querySelector('.success');
 
-function renderSuccessMessage() {
+const renderSuccessMessage = function() {
   renderMessageTemplate(successContent);
-}
+};
 
 //Создать сообщение о ошибке отправки формы
 const errorTemplate = document.querySelector('#error').content;
 const errorContent = errorTemplate.querySelector('.error');
 
-function renderErrorMessage() {
+const renderErrorMessage = () => {
   renderMessageTemplate(errorContent);
-}
+};
 
 //Ошибка загрузки обьявлений
-function renderAdvtErrorMessage() {
+const renderAdvtErrorMessage = () => {
   renderErrorMessage();
   document.querySelector('.error__message').textContent = 'Не удалось подгрузить обьявления';
   document.querySelector('.error__button').textContent = 'Продолжить';
-}
+};
 
 export {renderAdvtErrorMessage, renderSuccessMessage, renderErrorMessage};

@@ -9,7 +9,7 @@ const OFFER_NAME_BY_TYPE = {
 const template = document.querySelector('#card').content;
 const cardTemplate = template.querySelector('.popup');
 
-const createOfferPopup = function(offerData) {
+const createOfferPopup = (offerData) => {
   const offerPopup = cardTemplate.cloneNode(true);
 
   //наполняем одиночные элементы

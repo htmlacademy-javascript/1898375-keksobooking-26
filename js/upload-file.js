@@ -6,7 +6,7 @@ const avatarPreview = document.querySelector('.ad-form-header__image');
 const housingPhoto = document.querySelector('#images');
 const housingPreview = document.querySelector('.ad-form__photo-preview');
 
-function uploadPhoto(upload, preview) {
+const uploadPhoto = (upload, preview) => {
   upload.addEventListener('change', () => {
     const file = upload.files[0];
     const fileName = file.name.toLowerCase();
@@ -17,7 +17,7 @@ function uploadPhoto(upload, preview) {
       preview.src = URL.createObjectURL(file);
     }
   });
-}
+};
 
 uploadPhoto(avatarPhoto, avatarPreview);
 uploadPhoto(housingPhoto, housingPreview);

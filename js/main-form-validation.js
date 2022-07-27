@@ -30,9 +30,8 @@ const pristine = new Pristine(mainForm, {
 const roomsNumber = mainForm.querySelector('#room_number');
 const roomsCapacity = mainForm.querySelector('#capacity');
 
-function validateCapacity() {
-  return ROOMS_OPTION[roomsNumber.value].includes(roomsCapacity.value);
-}
+const validateCapacity = () =>
+  ROOMS_OPTION[roomsNumber.value].includes(roomsCapacity.value);
 
 pristine.addValidator(roomsNumber, validateCapacity, ERROR_VALIDATION_MESSAGE);
 pristine.addValidator(roomsCapacity, validateCapacity, ERROR_VALIDATION_MESSAGE);
