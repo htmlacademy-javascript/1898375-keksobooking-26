@@ -3,7 +3,7 @@ import {isEscKeydown, isMouseButton} from './util.js';
 //Удаление сообщения
 const messageRemoveHadler = (evt) => {
   const messageToUser = document.querySelector('#message-to-user');
-  if (isEscKeydown(evt) || isMouseButton && messageToUser) {
+  if (isEscKeydown(evt) || isMouseButton(evt)) {
     messageToUser.remove();
     document.removeEventListener('click', messageRemoveHadler);
     document.removeEventListener('keydown', messageRemoveHadler);
@@ -22,7 +22,7 @@ const renderMessageTemplate = (elements) => {
 const successTemplate = document.querySelector('#success').content;
 const successContent = successTemplate.querySelector('.success');
 
-const renderSuccessMessage = function() {
+const renderSuccessMessage = () => {
   renderMessageTemplate(successContent);
 };
 

@@ -2,8 +2,7 @@ import {createOfferPopup} from './offer-popup.js';
 import {enableMainForm, enableFiltersForm, setAddress} from './form.js';
 import {getAdsData} from './http.js';
 import {renderAdvtErrorMessage} from './dialog.js';
-import {saveAds} from './save-ads-data.js';
-import {getMaxAds} from './util.js';
+import {saveAds, getMaxAds} from './save-ads-data.js';
 
 const DEFAULT_ADRESS = {
   lat: 35.70139,
@@ -20,7 +19,7 @@ const map = L.map('map-canvas')
       (ads) => {
         enableFiltersForm();
         saveAds(ads);
-        renderMarkersLayer(getMaxAds(ads));
+        renderMarkersLayer(getMaxAds());
       },
       () => {
         renderAdvtErrorMessage();
@@ -75,7 +74,7 @@ const resetMapView = () => {
     lng: DEFAULT_ADRESS.lng,
   }, 10);
   setAddress(DEFAULT_ADRESS);
-  L.removeFrom(map);
+  renderMarkersLayer(getMaxAds());
 };
 
 //Получение координат с главной метки
@@ -110,7 +109,7 @@ const clearLayerMarkers = () => {
   markerLayerGroup.clearLayers();
 };
 
-//Создать слой маркеров (декларативное обьявление для вставки в загрузку карты)
+//Создать слой маркеров (декларативное обьявление для вставка в загрузку карты)
 function renderMarkersLayer(offers) {
   clearLayerMarkers();
   offers.forEach((offer) => {

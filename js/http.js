@@ -8,7 +8,7 @@ const getAdsData = (onSuccess, onFail) => {
       if (response.ok) {
         return  response.json();
       } else {
-        throw new Error('Не удалось загрузить обявления.');
+        throw new Error('Не удалось загрузить объявления.');
       }
     })
     .then((offers) => {
