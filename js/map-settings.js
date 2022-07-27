@@ -1,6 +1,8 @@
 import {createOfferPopup} from './offer-popup.js';
 import {enableMainForm, enableFiltersForm, setAddress} from './form.js';
 import {getAdsData} from './http.js';
+import {renderAdvtErrorMessage} from './dialog.js';
+import {saveAds, getMaxAds} from './save-ads-data.js';
 
 const DEFAULT_ADRESS = {
   lat: 35.70139,
@@ -11,6 +13,18 @@ const map = L.map('map-canvas')
   .on('load', () => {
     enableMainForm();
     setAddress(DEFAULT_ADRESS);
+
+    //Загрузка и отрисовка обьявлений
+    getAdsData(
+      (ads) => {
+        enableFiltersForm();
+        saveAds(ads);
+        renderMarkersLayer(getMaxAds());
+      },
+      () => {
+        renderAdvtErrorMessage();
+      },);
+
   })
   .setView({
     lat: DEFAULT_ADRESS.lat,
@@ -49,7 +63,7 @@ const mainMarker = L.marker(
 
 mainMarker.addTo(map);
 
-function resetMapView() {
+const resetMapView = () => {
   mainMarker.setLatLng({
     lat: DEFAULT_ADRESS.lat,
     lng: DEFAULT_ADRESS.lng,
@@ -60,7 +74,8 @@ function resetMapView() {
     lng: DEFAULT_ADRESS.lng,
   }, 10);
   setAddress(DEFAULT_ADRESS);
-}
+  renderMarkersLayer(getMaxAds());
+};
 
 //Получение координат с главной метки
 mainMarker.on('moveend', (evt) => {
@@ -69,9 +84,9 @@ mainMarker.on('moveend', (evt) => {
 });
 
 //Добавить слой меток на карту с всплывающими окнами
-const markerGroup = L.layerGroup().addTo(map);
+const markerLayerGroup = L.layerGroup().addTo(map);
 
-function createMarker(element) {
+const createMarker = (element) => {
   const lat = element.location.lat;
   const lng = element.location.lng;
   const marker = L.marker(
@@ -85,21 +100,22 @@ function createMarker(element) {
   );
 
   marker
-    .addTo(markerGroup)
+    .addTo(markerLayerGroup)
     .bindPopup(createOfferPopup(element));
-}
+};
 
-//Создать слой маркеров
+//Очистить слой маркеров
+const clearLayerMarkers = () => {
+  markerLayerGroup.clearLayers();
+};
+
+//Создать слой маркеров (декларативное обьявление для вставка в загрузку карты)
 function renderMarkersLayer(offers) {
+  clearLayerMarkers();
   offers.forEach((offer) => {
     createMarker(offer);
   });
 }
 
-//Получить данные с сервера и отрисовать их на карте
-getAdsData((offers) => {
-  enableFiltersForm();
-  renderMarkersLayer(offers);
-});
 
-export {resetMapView};
+export {resetMapView,renderMarkersLayer};

@@ -1,29 +1,26 @@
-import {sliceArray} from './util.js';
-import {renderAdvtErrorMessage} from './dialog.js';
-
 const REQUEST_ADDRESS = 'https://26.javascript.pages.academy/keksobooking/data';
 const SENDING_ADDRESS = 'https://26.javascript.pages.academy/keksobooking';
 
 //Запросить данные с сервера
-function getAdsData(onSuccess) {
+const getAdsData = (onSuccess, onFail) => {
   fetch(REQUEST_ADDRESS)
     .then((response) => {
       if (response.ok) {
         return  response.json();
       } else {
-        throw new Error('Не удалось загрузить обявления.');
+        throw new Error('Не удалось загрузить объявления.');
       }
     })
     .then((offers) => {
-      onSuccess(sliceArray(offers));
+      onSuccess(offers);
     })
     .catch(() => {
-      renderAdvtErrorMessage();
+      onFail();
     });
-}
+};
 
 //Сбор и отправка данных на сервер
-function saveAdsData(onSuccess, onFail, body) {
+const saveAdsData = (onSuccess, onFail, body) =>{
   fetch(
     SENDING_ADDRESS,
     {
@@ -41,6 +38,6 @@ function saveAdsData(onSuccess, onFail, body) {
     .catch(() => {
       onFail();
     });
-}
+};
 
 export {getAdsData, saveAdsData};
