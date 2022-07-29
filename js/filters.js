@@ -1,4 +1,4 @@
-const MAX_ADS_AMOUN = 10;
+const MAX_ADS_AMOUNT = 10;
 const MIN_ADS_PRICE = 10000;
 const MAX_ADS_PRICE = 50000;
 
@@ -38,7 +38,7 @@ const filterByFeatures = (ad) => {
   return checkBoxFeatures.length === 0;
 };
 
-const filteringAds = (ads) => {
+const getFilteredAds = (ads) => {
   const result = [];
 
   for (const ad of ads) {
@@ -46,7 +46,7 @@ const filteringAds = (ads) => {
       result.push(ad);
     }
 
-    if (result.length === MAX_ADS_AMOUN) {
+    if (result.length === MAX_ADS_AMOUNT) {
       break;
     }
   }
@@ -54,4 +54,4 @@ const filteringAds = (ads) => {
   return result;
 };
 
-export {filteringAds};
+export {getFilteredAds};
