@@ -4,15 +4,17 @@ import {getAdsData} from './http.js';
 import {renderAdvtErrorMessage} from './dialog.js';
 import {saveAds, getMaxAds} from './save-ads-data.js';
 
-const DEFAULT_ADRESS = {
+const DEFAULT_ADDRESS = {
   lat: 35.70139,
   lng: 139.70972,
 };
 
+const DEFAULT_MAP_ZOOM = 10;
+
 const map = L.map('map-canvas')
   .on('load', () => {
     enableMainForm();
-    setAddress(DEFAULT_ADRESS);
+    setAddress(DEFAULT_ADDRESS);
 
     //Загрузка и отрисовка обьявлений
     getAdsData(
@@ -27,9 +29,9 @@ const map = L.map('map-canvas')
 
   })
   .setView({
-    lat: DEFAULT_ADRESS.lat,
-    lng: DEFAULT_ADRESS.lng,
-  }, 10);
+    lat: DEFAULT_ADDRESS.lat,
+    lng: DEFAULT_ADDRESS.lng,
+  }, DEFAULT_MAP_ZOOM);
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -52,8 +54,8 @@ const secondPinIcon = L.icon({
 
 const mainMarker = L.marker(
   {
-    lat: DEFAULT_ADRESS.lat,
-    lng: DEFAULT_ADRESS.lng,
+    lat: DEFAULT_ADDRESS.lat,
+    lng: DEFAULT_ADDRESS.lng,
   },
   {
     draggable: true,
@@ -65,15 +67,15 @@ mainMarker.addTo(map);
 
 const resetMapView = () => {
   mainMarker.setLatLng({
-    lat: DEFAULT_ADRESS.lat,
-    lng: DEFAULT_ADRESS.lng,
+    lat: DEFAULT_ADDRESS.lat,
+    lng: DEFAULT_ADDRESS.lng,
   });
 
   map.setView({
-    lat: DEFAULT_ADRESS.lat,
-    lng: DEFAULT_ADRESS.lng,
+    lat: DEFAULT_ADDRESS.lat,
+    lng: DEFAULT_ADDRESS.lng,
   }, 10);
-  setAddress(DEFAULT_ADRESS);
+  setAddress(DEFAULT_ADDRESS);
   renderMarkersLayer(getMaxAds());
 };
 

@@ -1,3 +1,5 @@
+const DEFAULT_DELAY = 500;
+
 //Проверка на нажатие клавишы ESC
 const isEscKeydown = (evt) => evt.key === 'Escape';
 
@@ -5,7 +7,7 @@ const isEscKeydown = (evt) => evt.key === 'Escape';
 const isMouseButton = (evt) => evt.button === 0;
 
 
-const debounce = (callback, timeoutDelay = 500) => {
+const setDebounce = (callback, timeoutDelay = DEFAULT_DELAY) => {
   let timeoutId;
 
   return (...rest) => {
@@ -14,4 +16,4 @@ const debounce = (callback, timeoutDelay = 500) => {
   };
 };
 
-export {isEscKeydown,isMouseButton, debounce};
+export {isEscKeydown,isMouseButton, setDebounce};
