@@ -3,24 +3,33 @@ import {resetMapView, renderMarkersLayer,} from './map-settings.js';
 import {saveAdsData} from './http.js';
 import {renderSuccessMessage, renderErrorMessage} from './dialog.js';
 import {getSavedAds} from './save-ads-data.js';
-import {filteringAds} from './filters.js';
-import {debounce} from './util.js';
+import {getFilteredAds} from './filters.js';
+import {setDebounce} from './util.js';
 
 const RENDER_DELAY = 500;
+const DEFAULT_FORM_IMAGE = 'img/muffin-grey.svg';
 
 //элементы форм
 const filterForm = document.querySelector('.map__filters');
-const mainForm = document.querySelector('.ad-form');
 const filterFormSelects = filterForm.querySelectorAll('.map__filter');
-const filterFormCheckboxes = filterForm.querySelectorAll('fieldset');
+const filterCheckboxefieldset = filterForm.querySelector('fieldset');
+
+const mainForm = document.querySelector('.ad-form');
 const mainFormElements = mainForm.querySelectorAll('fieldset');
 
-const setElementActive = (item) => {
-  item.removeAttribute('disabled');
+const userUploadAvatar = document.querySelector('.ad-form-header__image');
+const userUploadPhoto = document.querySelector('.ad-form__photo-preview');
+
+const timeFildset = mainForm.querySelector('.ad-form__element--time');
+const checkInTime = timeFildset.querySelector('#timein');
+const checkOutTime = timeFildset.querySelector('#timeout');
+
+const setElementActive = (element) => {
+  element.removeAttribute('disabled');
 };
 
-const setElementDisabled = (item) => {
-  item.setAttribute('disabled');
+const setElementDisabled = (element) => {
+  element.setAttribute('disabled');
 };
 
 //Сделать формы на странице активными
@@ -32,19 +41,19 @@ const enableMainForm = () => {
 const enableFiltersForm = () => {
   filterForm.classList.remove('map__filters--disabled');
   filterFormSelects.forEach(setElementActive);
-  filterFormCheckboxes.forEach(setElementActive);
+  setElementActive(filterCheckboxefieldset);
 };
 
 //Сделать формы на странице неактивными
-const disabledMainForm = () => {
+const disableMainForm = () => {
   mainForm.classList.add('ad-form--disabled');
   mainFormElements.forEach(setElementDisabled);
 };
 
-const disabledFiltersForm = () => {
+const disableFiltersForm = () => {
   filterForm.classList.add('map__filters--disabled');
   filterFormSelects.forEach(setElementDisabled);
-  filterFormCheckboxes.forEach(setElementDisabled);
+  setElementDisabled(filterCheckboxefieldset);
 };
 
 //Записать координаты в поле адреса
@@ -56,6 +65,9 @@ const setAddress = (address) =>{
 // Обнуление формы и карты после отправки
 const resetMapAndForm = () => {
   mainForm.reset();
+  filterForm.reset();
+  userUploadAvatar.src = DEFAULT_FORM_IMAGE;
+  userUploadPhoto.src = DEFAULT_FORM_IMAGE;
   resetMapView();
 };
 
@@ -79,11 +91,19 @@ const unblockSubmitButton = () => {
   submitButton.textContent = 'Опубликовать';
 };
 
+//Синхранизация заезда и выезда
+timeFildset.addEventListener('change', (evt) => {
+  if(evt.target === checkInTime) {
+    checkOutTime.value = evt.target.value;
+  }
+  checkInTime.value = evt.target.value;
+});
+
 //фильтрация маркеров
-filterForm.addEventListener('change', debounce(
+filterForm.addEventListener('change', setDebounce(
   () => {
     const ads = getSavedAds();
-    const filteredAds = filteringAds(ads);
+    const filteredAds = getFilteredAds(ads);
     renderMarkersLayer(filteredAds);
   }, RENDER_DELAY));
 
@@ -110,4 +130,4 @@ mainForm.addEventListener('submit', (evt) => {
 });
 
 
-export {enableMainForm, enableFiltersForm, disabledMainForm, disabledFiltersForm, setAddress};
+export {enableMainForm, enableFiltersForm, disableMainForm, disableFiltersForm, setAddress};

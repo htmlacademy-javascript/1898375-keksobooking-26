@@ -1,12 +1,12 @@
 import {isEscKeydown, isMouseButton} from './util.js';
 
 //Удаление сообщения
-const messageRemoveHadler = (evt) => {
+const removeMessage = (evt) => {
   const messageToUser = document.querySelector('#message-to-user');
   if (isEscKeydown(evt) || isMouseButton(evt)) {
     messageToUser.remove();
-    document.removeEventListener('click', messageRemoveHadler);
-    document.removeEventListener('keydown', messageRemoveHadler);
+    document.removeEventListener('click', removeMessage);
+    document.removeEventListener('keydown', removeMessage);
   }
 };
 
@@ -14,8 +14,8 @@ const messageRemoveHadler = (evt) => {
 const renderMessageTemplate = (elements) => {
   const newPopup = elements.cloneNode(true);
   document.body.append(newPopup);
-  document.addEventListener('click', messageRemoveHadler);
-  document.addEventListener('keydown', messageRemoveHadler);
+  document.addEventListener('click', removeMessage);
+  document.addEventListener('keydown', removeMessage);
 };
 
 //Создать сообщение о успешной отправке формы

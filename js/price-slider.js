@@ -1,8 +1,8 @@
-const priceSlaider = document.querySelector('.ad-form__slider');
+const priceSlider = document.querySelector('.ad-form__slider');
 const priceInput = document.querySelector('#price');
 const placeSelect = document.querySelector('#type');
 
-noUiSlider.create(priceSlaider,{
+noUiSlider.create(priceSlider,{
   range: {
     min: 0,
     max: Number(priceInput.max),
@@ -22,22 +22,22 @@ noUiSlider.create(priceSlaider,{
 
 //Изменение значение цены и слайдера через выбор места
 placeSelect.addEventListener('change', () => {
-  priceSlaider.noUiSlider.updateOptions({
+  priceSlider.noUiSlider.updateOptions({
     range: {
       min: Number(priceInput.min),
       max: Number(priceInput.max),
     },
     start: Number(priceInput.min),
   });
-  priceSlaider.noUiSlider.set(priceInput.value);
+  priceSlider.noUiSlider.set(priceInput.value);
 });
 
 //Управление значением ручку слайдера
-priceSlaider.noUiSlider.on('update', () => {
-  priceInput.value = priceSlaider.noUiSlider.get();
+priceSlider.noUiSlider.on('update', () => {
+  priceInput.value = priceSlider.noUiSlider.get();
 });
 
 //Управление noUiSlider'ом через ввод значения
 priceInput.addEventListener('input', () => {
-  priceSlaider.noUiSlider.set(priceInput.value);
+  priceSlider.noUiSlider.set(priceInput.value);
 });
